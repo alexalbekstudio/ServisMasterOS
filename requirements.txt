@@ -22,3 +22,5 @@ reportlab>=4.2.0
 
 # HTTP klijent (za VIN, notifikacije)
 requests>=2.32.0
+
+email-validator>=2.0.0
