@@ -57,9 +57,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             const res = await fetch(`/api/v1/analytics/mechanics?period_days=${days}`, {
                 headers: ApiService.getHeaders(),
             });
-            if (!res.ok) throw new Error("Neuspešno učitavanje.");
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.detail || "Greška pri učitavanju.");
+            }
 
             const data = await res.json();
+            console.log("Mechanics data:", data);
+
             if (!data.mechanics || data.mechanics.length === 0) {
                 listContainer.innerHTML = `<div class="empty-state-text">Nema majstora u sistemu.</div>`;
                 return;
@@ -68,7 +73,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             listContainer.innerHTML = "";
             data.mechanics.forEach((m, idx) => {
                 const row = document.createElement("div");
-                row.className = "mechanic-row";
                 row.style.cssText = "padding: 12px 0; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 12px;";
 
                 row.innerHTML = `
@@ -82,7 +86,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 `;
                 listContainer.appendChild(row);
             });
-        } catch (e) { console.error("Greška:", e); }
+        } catch (e) {
+            console.error("Mechanics greška:", e);
+            listContainer.innerHTML = `<div class="error-state-text">${e.message}</div>`;
+        }
     }
 
     function formatRSD(num) {

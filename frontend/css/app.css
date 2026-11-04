@@ -510,3 +510,228 @@
 }
 
 .step-line.active { background-color: var(--success); }
+
+/* ==========================================================================
+   KAMERA MODAL
+   ========================================================================== */
+.camera-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 16px;
+}
+
+.camera-modal.active {
+    display: flex;
+}
+
+.camera-header {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    gap: 8px;
+}
+
+.camera-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.btn-close-cam {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.camera-preview-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 65vh;
+    background-color: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#camera-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.camera-overlay-frame {
+    position: absolute;
+    width: 85%;
+    height: 55%;
+    border: 2px dashed rgba(59, 130, 246, 0.85);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.camera-overlay-frame span {
+    font-size: 0.75rem;
+    color: #93c5fd;
+    font-weight: 600;
+    background: rgba(15, 23, 42, 0.7);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.camera-controls {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+
+.btn-shutter {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 6px solid #3b82f6;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+.btn-shutter:active {
+    transform: scale(0.92);
+    background-color: #cbd5e1;
+}
+
+/* Popravka dugmeta za skener */
+#btn-open-scanner {
+    width: auto !important;
+    padding: 10px 20px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 !important;
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    border: 1.5px solid var(--card-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+#btn-open-scanner:hover {
+    border-color: var(--accent);
+    background-color: var(--accent-soft);
+    color: var(--accent);
+}
+
+/* Scanner modal — popravka crne pozadine */
+.scanner-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.scanner-modal.active,
+.scanner-modal[style*="flex"] {
+    display: flex !important;
+}
+
+.scanner-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 480px;
+    padding: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-dropdown);
+}
+
+.scanner-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 8px;
+}
+
+.scanner-title {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--accent);
+}
+
+.scanner-close-btn {
+    width: auto !important;
+    padding: 4px 10px !important;
+    margin: 0 !important;
+    min-width: 36px;
+}
+
+#reader {
+    width: 100%;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #000;
+}
+
+#scanner-status {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin: 10px 0;
+}
+
+.file-fallback-box {
+    border-top: 1px solid var(--card-border);
+    padding-top: 10px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.file-fallback-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.file-input-full {
+    font-size: 0.8rem;
+    width: 100%;
+}
