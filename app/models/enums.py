@@ -1,0 +1,40 @@
+import enum
+
+
+class UserRole(str, enum.Enum):
+    OWNER = "OWNER"
+    MECHANIC = "MECHANIC"
+    RECEPTIONIST = "RECEPTIONIST"
+
+
+class WorkOrderStatus(str, enum.Enum):
+    RECEIVED = "RECEIVED"
+    DIAGNOSING = "DIAGNOSING"
+    WAITING_FOR_PARTS = "WAITING_FOR_PARTS"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    DELIVERED = "DELIVERED"
+    CANCELLED = "CANCELLED"
+
+
+class PhotoCategory(str, enum.Enum):
+    INITIAL_DAMAGE = "INITIAL_DAMAGE"
+    DEFECT = "DEFECT"
+    REPLACED_OLD_PART = "REPLACED_OLD_PART"
+    NEW_PART_INSTALLED = "NEW_PART_INSTALLED"
+    FINAL = "FINAL"
+
+
+class ReminderType(str, enum.Enum):
+    SMALL_SERVICE = "SMALL_SERVICE"
+    BIG_SERVICE = "BIG_SERVICE"
+    REGISTRATION = "REGISTRATION"
+    BRAKE_FLUID = "BRAKE_FLUID"
+    CUSTOM = "CUSTOM"
+
+
+class ReminderStatus(str, enum.Enum):
+    PENDING = "PENDING"
+    SENT = "SENT"
+    FAILED = "FAILED"
+    DISMISSED = "DISMISSED"
