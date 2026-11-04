@@ -47,3 +47,9 @@ desktop.ini
 
 # Test
 .pytest_cache/
+
+# Backups
+backups/
+*.sql
+*.tar.gz
+*.dump
