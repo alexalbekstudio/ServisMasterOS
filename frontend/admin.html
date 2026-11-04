@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ServisMasterOS — Admin Panel</title>
+    <link rel="icon" type="image/png" href="/static/img/logo-a.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <meta name="theme-color" content="#0f172a">
+</head>
+<body>
+    <header>
+        <div class="brand-wrapper">
+            <img src="/static/img/logo-a.png" alt="Logo" class="brand-logo">
+            <div class="brand-text-container">
+                <div class="brand-title-row">
+                    <h1>Admin Panel</h1>
+                    <span class="badge" style="background: var(--danger); color: white; border-color: var(--danger);">SUPER ADMIN</span>
+                </div>
+                <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
+            </div>
+        </div>
+        <button id="btn-logout" class="btn-secondary header-logout-btn">Odjava</button>
+    </header>
+
+    <main>
+        <!-- KPI -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-label">Ukupno servisa</span>
+                <div class="kpi-value" id="kpi-total-shops">0</div>
+                <span class="kpi-sub" id="kpi-active-shops">0 aktivnih</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Ukupno korisnika</span>
+                <div class="kpi-value" id="kpi-total-users">0</div>
+                <span class="kpi-sub">u svim servisima</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Ukupno naloga</span>
+                <div class="kpi-value kpi-value-success" id="kpi-total-orders">0</div>
+                <span class="kpi-sub">svih vremena</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Paketi</span>
+                <div class="kpi-value" id="kpi-plans" style="font-size: 0.9rem;">-</div>
+            </div>
+        </div>
+
+        <!-- Lista servisa -->
+        <section class="card">
+            <div class="section-header-flex">
+                <h2>Registrovani servisi</h2>
+                <input type="text" id="shop-search" class="search-input-compact" placeholder="🔍 Pretraga...">
+            </div>
+            <div id="shops-list">
+                <div class="empty-state-text">Učitavanje...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal za izmenu pretplate -->
+    <div id="sub-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="sub-modal-title">Izmena pretplate</h2>
+                <button type="button" class="btn-secondary modal-close-btn" id="btn-close-sub">&times;</button>
+            </div>
+            <input type="hidden" id="sub-shop-id">
+            <div class="form-group">
+                <label for="sub-plan">Paket</label>
+                <select id="sub-plan">
+                    <option value="BASIC">Basic</option>
+                    <option value="PRO">Pro</option>
+                    <option value="ENTERPRISE">Enterprise</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sub-status">Status</label>
+                <select id="sub-status">
+                    <option value="TRIAL">Trial</option>
+                    <option value="ACTIVE">Aktivan</option>
+                    <option value="SUSPENDED">Suspendovan</option>
+                    <option value="CANCELLED">Otkazan</option>
+                </select>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="sub-max-users">Max korisnika</label>
+                    <input type="number" id="sub-max-users" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="sub-max-orders">Max naloga/mesec</label>
+                    <input type="number" id="sub-max-orders" min="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="sub-notes">Beleške (interno)</label>
+                <textarea id="sub-notes" rows="2"></textarea>
+            </div>
+            <button type="button" class="btn-primary" id="btn-save-sub">Sačuvaj izmene</button>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/admin.js"></script>
+    <script src="/static/js/help.js"></script>
+</body>
+</html>

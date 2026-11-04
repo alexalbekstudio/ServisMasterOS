@@ -59,8 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (btnLogout) {
         btnLogout.addEventListener("click", () => {
-            localStorage.removeItem("token");
-            location.reload();
+            ApiService.logout();
         });
     }
 

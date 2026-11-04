@@ -39,18 +39,19 @@ class Settings(BaseSettings):
     # ============================================
     # TELEGRAM (opciono)
     # ============================================
-    TELEGRAM_BOT_TOKEN: str = ""
-    TELEGRAM_DEV_CHAT_ID: str = ""
+    TELEGRAM_BOT_TOKEN: str = "8693240161:AAGUExmbvItiRInZGpBHZZt3jsTx-7aCH6o"
+    TELEGRAM_DEV_CHAT_ID: str = "7815212093"
 
     # ============================================
     # EMAIL (SMTP)
     # ============================================
     SMTP_HOST: str = "smtp.gmail.com"
     SMTP_PORT: int = 587
-    SMTP_USER: str = ""
-    SMTP_PASSWORD: str = ""
-    SMTP_FROM: str = ""
-    TEST_EMAIL_RECIPIENT: str = ""
+    SMTP_USER: str = "alexalbekstudio.design@gmail.com"
+    SMTP_PASSWORD: str = "stcy zhsb nyhp ujzy"
+    SMTP_FROM: str = "alexalbekstudio.design@gmail.com"
+    TEST_EMAIL_RECIPIENT: str = "alexalbekstudio.design@gmail.com"
+    SUPER_ADMIN_EMAIL: str = "alexalbekstudio.design@gmail.com"
 
     # ============================================
     # VIN DEKODER
@@ -83,6 +84,7 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         case_sensitive=True,
         extra="ignore",
+        env_ignore_empty=True,
     )
 
 

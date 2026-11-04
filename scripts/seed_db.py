@@ -47,7 +47,7 @@ def seed():
             pib="108923451",
             maticni_broj="20912345",
             phone="013/333-444",
-            email="kontakt@autocentarmaster.rs",
+            email="alexalbekstudio.design@gmail.com",
             address="Bavaništanski put 12",
             city="Pančevo",
             currency="RSD",
@@ -60,8 +60,8 @@ def seed():
         # 4. Korisnici
         owner = User(
             shop_id=shop.id,
-            email="vlasnik@autocentarmaster.rs",
-            password_hash=get_password_hash("sifra123"),
+            email="alexalbekstudio.design@gmail.com",
+            password_hash=get_password_hash("ServiceMasterOS"),
             full_name="Marko Petrović",
             phone="064/111-2222",
             role=UserRole.OWNER,

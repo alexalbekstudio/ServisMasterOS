@@ -36,3 +36,4 @@ class Shop(Base):
     work_orders = relationship("WorkOrder", back_populates="shop", cascade="all, delete-orphan")
     reminders = relationship("Reminder", back_populates="shop", cascade="all, delete-orphan")
     notification_logs = relationship("NotificationLog", back_populates="shop", cascade="all, delete-orphan")
+    subscription = relationship("Subscription", back_populates="shop", uselist=False, cascade="all, delete-orphan")

@@ -6,9 +6,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             const res = await fetch("/api/v1/analytics/summary", {
                 headers: ApiService.getHeaders()
             });
-            if (!res.ok) throw new Error("Neuspešno učitavanje analitike.");
+            if (!res.ok) {
+                console.error("Analytics API greška:", res.status);
+                return;
+            }
             const data = await res.json();
-
+            
             document.getElementById("kpi-monthly-rev").textContent = formatRSD(data.monthly_revenue);
             document.getElementById("kpi-completed-orders").textContent = `${data.monthly_completed_count} završenih naloga`;
             document.getElementById("kpi-avg-ticket").textContent = formatRSD(data.average_ticket);
@@ -108,8 +111,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (btnLogout) {
         btnLogout.addEventListener("click", () => {
-            localStorage.removeItem("token");
-            location.reload();
+            ApiService.logout();
         });
     }
 

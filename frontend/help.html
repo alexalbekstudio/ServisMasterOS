@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ServisMasterOS — Uputstvo za korišćenje</title>
+    <link rel="icon" type="image/png" href="/static/img/logo-a.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <meta name="theme-color" content="#0f172a">
+    <style>
+        .help-content {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        .help-content h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .help-content h2 {
+            font-size: 1.3rem;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            color: var(--accent);
+            border-bottom: 2px solid var(--card-border);
+            padding-bottom: 6px;
+        }
+        .help-content h3 {
+            font-size: 1.05rem;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .help-content p { margin-bottom: 12px; }
+        .help-content ul, .help-content ol {
+            margin-left: 24px;
+            margin-bottom: 12px;
+        }
+        .help-content li { margin-bottom: 6px; }
+        .help-content code {
+            background: var(--gray-100);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+        }
+        .help-content strong { color: var(--text-primary); }
+        .help-content hr {
+            border: none;
+            border-top: 1px solid var(--card-border);
+            margin: 24px 0;
+        }
+        .help-toc {
+            background: var(--bg-subtle);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+        }
+        .help-toc h2 { margin-top: 0; border: none; }
+        .help-toc ol { margin-left: 20px; }
+        .help-toc a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .help-toc a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand-wrapper">
+            <img src="/static/img/logo-a.png" alt="Logo" class="brand-logo">
+            <div class="brand-text-container">
+                <div class="brand-title-row">
+                    <h1>Uputstvo za korišćenje</h1>
+                    <span class="badge">Help</span>
+                </div>
+                <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
+            </div>
+        </div>
+        <button id="btn-download-pdf" class="btn-secondary header-logout-btn" style="margin-right: 8px;">📥 PDF</button>
+        <button id="btn-back" class="btn-secondary header-logout-btn">← Nazad</button>
+    </header>
+
+    <main class="card">
+        <div class="help-content" id="help-content">
+            <p style="text-align: center; color: var(--text-muted);">Učitavanje uputstva...</p>
+        </div>
+    </main>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/help-page.js"></script>
+</body>
+</html>

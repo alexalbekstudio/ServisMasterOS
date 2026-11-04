@@ -64,9 +64,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <option value="DELIVERED" ${o.status === 'DELIVERED' ? 'selected' : ''}>Preuzeto</option>
                     </select>
                 </div>
-                <div class="order-actions-row" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+                <div class="order-actions-row" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">
                     <button type="button" class="btn-secondary btn-add-item" data-id="${o.id}">+ Stavka</button>
-                    <button type="button" class="btn-secondary btn-open-pdf" data-id="${o.id}">📄 PDF</button>
+                    <button type="button" class="btn-secondary btn-open-pdf" data-id="${o.id}">📄 SR</button>
+                    <button type="button" class="btn-secondary btn-open-pdf-en" data-id="${o.id}">📄 EN</button>
                     <button type="button" class="btn-secondary" onclick="window.open('/status?token=${o.tracking_token}', '_blank')">Link</button>
                     <button type="button" class="btn-secondary btn-whatsapp" data-id="${o.id}">📱 WA</button>
                 </div>
@@ -116,6 +117,22 @@ document.addEventListener("DOMContentLoaded", async () => {
                     window.open(URL.createObjectURL(blob), "_blank");
                 } catch (e) { alert(e.message); }
                 finally { btn.textContent = "📄 PDF"; }
+            });
+        });
+
+                document.querySelectorAll(".btn-open-pdf-en").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const orderId = btn.getAttribute("data-id");
+                btn.textContent = "⏳...";
+                try {
+                    const res = await fetch(`/api/v1/work-orders/${orderId}/pdf-en`, {
+                        headers: ApiService.getHeaders()
+                    });
+                    if (!res.ok) throw new Error("Error.");
+                    const blob = await res.blob();
+                    window.open(URL.createObjectURL(blob), "_blank");
+                } catch (e) { alert(e.message); }
+                finally { btn.textContent = "📄 EN"; }
             });
         });
 
@@ -250,8 +267,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (btnLogout) {
         btnLogout.addEventListener("click", () => {
-            localStorage.removeItem("token");
-            location.reload();
+            ApiService.logout();
         });
     }
 

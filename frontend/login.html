@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServisMasterOS — Prijava</title>
+    <link rel="icon" type="image/png" href="/static/img/logo-a.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <meta name="theme-color" content="#0f172a">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            padding: 32px 28px;
+            box-shadow: var(--shadow-card);
+        }
+        .auth-logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 16px;
+            display: block;
+            border-radius: var(--radius-md);
+        }
+        .auth-title {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .auth-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 28px;
+        }
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .auth-footer a {
+            color: var(--accent);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <img src="/static/img/logo-a.png" alt="Logo" class="auth-logo">
+        <h1 class="auth-title">Dobrodošli nazad</h1>
+        <p class="auth-subtitle">Prijavite se na vaš ServisMasterOS nalog</p>
+
+        <div id="alert-box" class="status-alert"></div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email adresa</label>
+                <input type="email" id="email" placeholder="vlasnik@autocentarmaster.rs" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Lozinka</label>
+                <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn-primary" id="btn-login">
+                Prijavi se
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Nemate nalog? <a href="/register">Registrujte svoj servis</a>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/login.js"></script>
+</body>
+</html>

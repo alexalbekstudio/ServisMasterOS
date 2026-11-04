@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServisMasterOS — Registracija</title>
+    <link rel="icon" type="image/png" href="/static/img/logo-a.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <meta name="theme-color" content="#0f172a">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            padding: 32px 28px;
+            box-shadow: var(--shadow-card);
+        }
+        .auth-logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 16px;
+            display: block;
+            border-radius: var(--radius-md);
+        }
+        .auth-title {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .auth-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+        }
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .auth-footer a {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .auth-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 20px 0 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--card-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <img src="/static/img/logo-a.png" alt="Logo" class="auth-logo">
+        <h1 class="auth-title">Registrujte svoj servis</h1>
+        <p class="auth-subtitle">Napravite nalog za vašu radionicu u 30 sekundi</p>
+
+        <div id="alert-box" class="status-alert"></div>
+
+        <form id="register-form">
+            <div class="auth-section-title">Podaci o servisu</div>
+            <div class="form-group">
+                <label for="shop_name">Naziv servisa</label>
+                <input type="text" id="shop_name" placeholder="npr. Auto Centar Master" required>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="shop_phone">Telefon servisa</label>
+                    <input type="tel" id="shop_phone" placeholder="npr. 013/333-444" required>
+                </div>
+                <div class="form-group">
+                    <label for="shop_city">Grad</label>
+                    <input type="text" id="shop_city" placeholder="npr. Pančevo" required>
+                </div>
+            </div>
+
+            <div class="auth-section-title">Podaci o vlasniku</div>
+            <div class="form-group">
+                <label for="owner_name">Ime i prezime</label>
+                <input type="text" id="owner_name" placeholder="npr. Marko Petrović" required>
+            </div>
+            <div class="form-group">
+                <label for="owner_email">Email adresa (za prijavu)</label>
+                <input type="email" id="owner_email" placeholder="vlasnik@vas-servis.rs" required>
+            </div>
+            <div class="form-group">
+                <label for="owner_password">Lozinka (min. 6 znakova)</label>
+                <input type="password" id="owner_password" placeholder="••••••••" required minlength="6">
+            </div>
+
+            <button type="submit" class="btn-primary" id="btn-register">
+                Registruj servis
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Već imate nalog? <a href="/login">Prijavite se</a>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/register.js"></script>
+</body>
+</html>

@@ -39,8 +39,8 @@
         <section class="card">
             <div class="section-header-flex">
                 <h2>+ Unos artikla na stanje</h2>
-                <button type="button" class="btn-secondary" id="btn-open-scanner" style="width: auto; padding: 10px 20px; font-size: 0.9rem; white-space: nowrap;">
-                    📷 Skeniraj Barkod / QR
+                <button type="button" class="btn-secondary btn-scanner-trigger" id="btn-open-scanner">
+                    📷 Skeniraj kod
                 </button>
             </div>
 
@@ -82,7 +82,7 @@
         </section>
 
         <!-- Scanner modal -->
-        <div id="scanner-modal" class="scanner-modal">
+        <div id="scanner-modal" class="scanner-modal" style="display: none;">
             <div class="scanner-card">
                 <div class="scanner-modal-header">
                     <h3 class="scanner-title">📷 Skeniranje koda</h3>
@@ -100,5 +100,6 @@
 
     <script src="/static/js/api.js"></script>
     <script src="/static/js/inventory.js"></script>
+    <script src="/static/js/help.js"></script>
 </body>
 </html>

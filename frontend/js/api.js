@@ -1,5 +1,13 @@
 const API_BASE_URL = "http://localhost:8000/api/v1";
 
+// Ako nema tokena i nismo na login/register/status — preusmeri na login
+const PUBLIC_PAGES = ["/login", "/register", "/status"];
+const currentPath = window.location.pathname;
+
+if (!localStorage.getItem("token") && !PUBLIC_PAGES.includes(currentPath)) {
+    window.location.href = "/login";
+}
+
 const ApiService = {
     token: localStorage.getItem("token") || null,
 
@@ -14,6 +22,11 @@ const ApiService = {
             headers["Authorization"] = `Bearer ${this.token}`;
         }
         return headers;
+    },
+
+    logout() {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
     },
 
     async login(email, password) {

@@ -735,3 +735,53 @@
     font-size: 0.8rem;
     width: 100%;
 }
+
+/* ==========================================================================
+   DUGME ZA SKENER BARKODA (Primarno, narandžasto, puna širina)
+   ========================================================================== */
+#btn-open-scanner {
+    width: 100% !important; /* Puna širina */
+    display: flex !important; /* Flex da centrira tekst */
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px !important;
+    margin: 0 0 16px 0 !important;
+    font-size: 0.95rem !important;
+    font-weight: 700;
+    background-color: var(--accent);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+    white-space: nowrap;
+}
+
+#btn-open-scanner:hover {
+    background-color: var(--accent-hover);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-1px);
+}
+
+#btn-open-scanner:active {
+    transform: translateY(0);
+    background-color: var(--accent-hover);
+}
+
+/* Scanner modal — skriven po defaultu */
+.scanner-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.scanner-modal.active {
+    display: flex !important;
+}

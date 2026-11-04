@@ -66,3 +66,14 @@ def get_current_shop_id(
 ) -> UUID:
     """Vraća ID servisa trenutno ulogovanog korisnika (multi-tenant izolacija)."""
     return current_user.shop_id
+
+def get_current_super_admin(
+    current_user: User = Depends(get_current_active_user),
+) -> User:
+    """Proverava da li je korisnik super-admin (vlasnik ServisMasterOS-a)."""
+    if current_user.email != settings.SUPER_ADMIN_EMAIL:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Pristup dozvoljen samo super-administratoru.",
+        )
+    return current_user

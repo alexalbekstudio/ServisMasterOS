@@ -13,7 +13,7 @@ from app.models.user import User
 from app.models.vehicle import Vehicle
 from app.models.work_order import WorkOrder
 
-router = APIRouter(prefix="/analytics", tags=["Analitika"])
+router = APIRouter()
 
 
 @router.get("/summary", response_model=Dict[str, Any])

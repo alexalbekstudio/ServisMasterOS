@@ -6,6 +6,7 @@ from app.models.enums import (
     ReminderType,
     ReminderStatus,
 )
+from app.models.subscription import Subscription, SubscriptionPlan, SubscriptionStatus
 from app.models.shop import Shop
 from app.models.user import User
 from app.models.customer import Customer
@@ -41,4 +42,7 @@ __all__ = [
     "InventoryLog",
     "InventoryChangeReason",
     "FiscalReceipt",
+    "Subscription", 
+    "SubscriptionPlan", 
+    "SubscriptionStatus",
 ]

@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -51,6 +54,18 @@ if FRONTEND_DIR.exists():
     def serve_frontend_root():
         return FileResponse(str(FRONTEND_DIR / "index.html"))
 
+    @app.get("/admin", tags=["Frontend"])
+    def serve_admin_page():
+        return FileResponse(str(FRONTEND_DIR / "admin.html"))
+
+    @app.get("/login", tags=["Frontend"])
+    def serve_login_page():
+        return FileResponse(str(FRONTEND_DIR / "login.html"))
+
+    @app.get("/register", tags=["Frontend"])
+    def serve_register_page():
+        return FileResponse(str(FRONTEND_DIR / "register.html"))
+
     @app.get("/orders", tags=["Frontend"])
     def serve_orders_page():
         return FileResponse(str(FRONTEND_DIR / "orders.html"))
@@ -70,6 +85,10 @@ if FRONTEND_DIR.exists():
     @app.get("/reminders", tags=["Frontend"])
     def serve_reminders_page():
         return FileResponse(str(FRONTEND_DIR / "reminders.html"))
+
+    @app.get("/help", tags=["Frontend"])
+    def serve_help_page():
+        return FileResponse(str(FRONTEND_DIR / "help.html"))
 
     # --- PWA fajlovi ---
     @app.get("/sw.js", tags=["PWA"])

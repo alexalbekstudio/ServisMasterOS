@@ -1,19 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Provera prijave
-    if (!ApiService.token) {
-        const email = prompt("Email:", "vlasnik@autocentarmaster.rs");
-        const password = prompt("Lozinka:", "sifra123");
-        if (email && password) {
-            try {
-                await ApiService.login(email, password);
-                showAlert("Uspešna prijava!", "success");
-            } catch (err) {
-                showAlert(err.message, "error");
-                return;
-            }
-        }
-    }
-
     // Elementi forme
     const customerSearch = document.getElementById("customer-search");
     const customerResults = document.getElementById("customer-results");
@@ -582,9 +567,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
+    // ODJAVA — koristi ApiService.logout()
     btnLogout.addEventListener("click", () => {
-        localStorage.removeItem("token");
-        location.reload();
+        ApiService.logout();
     });
 
     function showAlert(msg, type) {

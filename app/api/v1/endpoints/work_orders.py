@@ -328,6 +328,35 @@ def download_work_order_pdf(
         headers={"Content-Disposition": f'inline; filename="{filename}"'},
     )
 
+@router.get("/{work_order_id}/pdf-en")
+def download_work_order_pdf_en(
+    work_order_id: UUID,
+    db: Session = Depends(get_db),
+    shop_id: UUID = Depends(get_current_shop_id),
+):
+    """Generiše PDF radni nalog na engleskom jeziku."""
+    work_order = (
+        db.query(WorkOrder)
+        .filter(WorkOrder.id == work_order_id, WorkOrder.shop_id == shop_id)
+        .first()
+    )
+    if not work_order:
+        raise HTTPException(status_code=404, detail="Work order not found.")
+
+    vehicle = db.query(Vehicle).filter(Vehicle.id == work_order.vehicle_id).first()
+    customer = db.query(Customer).filter(Customer.id == vehicle.customer_id).first() if vehicle else None
+    shop = db.query(Shop).filter(Shop.id == shop_id).first()
+
+    if not vehicle or not customer or not shop:
+        raise HTTPException(status_code=400, detail="Missing data.")
+
+    pdf_bytes = PdfService.generate_work_order_pdf_en(shop, work_order, vehicle, customer)
+    filename = f"WorkOrder_{work_order.order_number}_{vehicle.license_plate}_EN.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="{filename}"'},
+    )
 
 @router.get("/public/status/{tracking_token}", response_model=PublicWorkOrderResponse)
 def get_public_work_order_status(
