@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ServisMasterOS — Prijem Vozila</title>
+    <link rel="icon" type="image/png" href="/static/img/logo-a.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="/static/img/logo-a.png">
+</head>
+<body>
+    <header>
+        <div class="brand-wrapper">
+            <img src="/static/img/logo-a.png" alt="Logo" class="brand-logo">
+            <div class="brand-text-container">
+                <div class="brand-title-row">
+                    <h1>ServisMasterOS</h1>
+                    <span class="badge">Prijem</span>
+                </div>
+                <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
+            </div>
+        </div>
+        <button id="btn-logout" class="btn-secondary header-logout-btn">Odjava</button>
+    </header>
+
+    <nav class="nav-links">
+        <a href="/" class="nav-link active">Prijem Vozila</a>
+        <a href="/orders" class="nav-link">Nalozi u radu</a>
+        <a href="/dashboard" class="nav-link">Kontrolna Tabla</a>
+        <a href="/inventory" class="nav-link">Magacin</a>
+        <a href="/reminders" class="nav-link">SMS Podsetnici</a>
+    </nav>
+
+    <div id="alert-box" class="status-alert"></div>
+
+    <main>
+        <section class="card">
+            <h2>1. Podaci o vlasniku</h2>
+            <input type="hidden" id="selected-customer-id">
+            <div class="form-group search-wrapper">
+                <label for="customer-search">Pretraga postojećeg klijenta</label>
+                <input type="text" id="customer-search" placeholder="Ime ili telefon..." autocomplete="off">
+                <div id="customer-results" class="search-results"></div>
+            </div>
+            <div id="new-customer-fields">
+                <div class="row">
+                    <div class="form-group">
+                        <label for="new-customer-name">Ime i prezime</label>
+                        <input type="text" id="new-customer-name" placeholder="npr. Marko Marković">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-customer-phone">Telefon (za SMS)</label>
+                        <input type="tel" id="new-customer-phone" placeholder="npr. 0641234567">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>2. Vozilo</h2>
+            <div class="ocr-box">
+                <div class="ocr-title">📷 Skeniraj saobraćajnu</div>
+                <div class="ocr-subtitle">Automatski prepoznaje tablice, VIN i marku.</div>
+                <div class="ocr-btn-row">
+                    <button type="button" class="btn-primary" id="btn-open-live-cam">📷 Kamera Uživo</button>
+                    <button type="button" class="btn-secondary" id="btn-trigger-file-upload">📁 Izaberi Sliku</button>
+                    <button type="button" class="btn-secondary" id="btn-skip-ocr">✏️ Ručni unos</button>
+                </div>
+                <input type="file" id="ocr-file-input" class="hidden-file-input" accept="image/*">
+                <div id="ocr-progress">⏳ Očitavam...</div>
+            </div>
+
+            <input type="hidden" id="selected-vehicle-id">
+            <div class="form-group search-wrapper">
+                <label for="vehicle-plate">Registarska oznaka</label>
+                <input type="text" id="vehicle-plate" class="uppercase-input" placeholder="npr. PA-123-AA" autocomplete="off" required>
+                <div id="vehicle-results" class="search-results"></div>
+            </div>
+
+            <div id="vehicle-history-container" class="vehicle-history-card" style="display: none;">
+                <div class="vehicle-history-header">
+                    <span class="vehicle-history-title">📖 Servisna knjižica</span>
+                    <span class="badge" id="history-visits-count">0 servisa</span>
+                </div>
+                <div id="history-items-list" class="vehicle-history-list"></div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="vehicle-make">Marka</label>
+                    <input type="text" id="vehicle-make" placeholder="npr. Renault" required>
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-model">Model</label>
+                    <input type="text" id="vehicle-model" placeholder="npr. Megane III" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="vehicle-vin">Broj šasije (VIN - 17 znakova)</label>
+                <input type="text" id="vehicle-vin" class="uppercase-input" placeholder="npr. VF1JZ000055123456">
+                <div id="vin-indicator" style="font-size: 0.8rem; margin-top: 4px; font-weight: 600;"></div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>3. Zapisnik oštećenja karoserije</h2>
+            <p class="ocr-subtitle">Kliknite na dijagram da označite oštećenje:</p>
+
+            <div class="damage-diagram-card">
+                <div class="row" style="margin-bottom: 8px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="damage-type-select">Tip oštećenja</label>
+                        <select id="damage-type-select">
+                            <option value="Ogrebotina">Ogrebotina</option>
+                            <option value="Udubljenje">Udubljenje</option>
+                            <option value="Naprslina/Polomljeno">Naprslina</option>
+                            <option value="Nedostaje deo">Nedostaje deo</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="damage-desc-input">Bliži opis</label>
+                        <input type="text" id="damage-desc-input" placeholder="npr. duboka ogrebotina">
+                    </div>
+                </div>
+
+                <div class="car-diagram-wrapper" id="car-diagram-container">
+                    <svg id="car-svg" class="car-svg" viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0" y="0" width="300" height="600" fill="#0f172a" rx="16"/>
+                        <rect x="20" y="100" width="25" height="60" rx="6" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+                        <rect x="255" y="100" width="25" height="60" rx="6" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+                        <rect x="20" y="440" width="25" height="60" rx="6" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+                        <rect x="255" y="440" width="25" height="60" rx="6" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+                        <path d="M 50 120 C 50 60, 90 30, 150 30 C 210 30, 250 60, 250 120 L 255 460 C 255 530, 220 570, 150 570 C 80 570, 45 530, 45 460 Z" fill="#1e293b" stroke="#3b82f6" stroke-width="3"/>
+                        <path d="M 65 170 L 235 170 L 215 240 L 85 240 Z" fill="#334155" stroke="#64748b" stroke-width="2"/>
+                        <path d="M 80 430 L 220 430 L 235 480 L 65 480 Z" fill="#334155" stroke="#64748b" stroke-width="2"/>
+                        <rect x="85" y="250" width="130" height="170" rx="8" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+                        <ellipse cx="75" cy="50" rx="14" ry="8" fill="#facc15"/>
+                        <ellipse cx="225" cy="50" rx="14" ry="8" fill="#facc15"/>
+                        <ellipse cx="70" cy="555" rx="12" ry="6" fill="#ef4444"/>
+                        <ellipse cx="230" cy="555" rx="12" ry="6" fill="#ef4444"/>
+                    </svg>
+                </div>
+                <div id="damage-list" class="damage-list"></div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>4. Zahtev klijenta & Prijem</h2>
+            <div class="row">
+                <div class="form-group">
+                    <label for="order-mileage">Kilometraža (km)</label>
+                    <input type="number" id="order-mileage" placeholder="npr. 185000" required>
+                </div>
+                <div class="form-group">
+                    <label for="order-fuel">Nivo goriva</label>
+                    <select id="order-fuel">
+                        <option value="1/4">1/4</option>
+                        <option value="1/2" selected>1/2</option>
+                        <option value="3/4">3/4</option>
+                        <option value="Full">Pun</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="order-complaint">Opis kvara</label>
+                <textarea id="order-complaint" rows="3" placeholder="npr. Mali servis..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="order-photo-url">Slika (URL)</label>
+                <input type="url" id="order-photo-url" placeholder="https://...">
+            </div>
+        </section>
+
+        <button type="button" class="btn-primary btn-submit-order" id="btn-submit-order">
+            Kreiraj Radni Nalog
+        </button>
+
+        <!-- Kamera modal -->
+        <div id="camera-modal" class="camera-modal">
+            <div class="camera-header">
+                <h3>Skeniranje saobraćajne</h3>
+                <button type="button" class="btn-close-cam" id="btn-close-camera">&times;</button>
+            </div>
+            <div class="camera-preview-container">
+                <video id="camera-video" autoplay playsinline></video>
+                <div class="camera-overlay-frame">
+                    <span>Uokvirite saobraćajnu</span>
+                </div>
+            </div>
+            <div class="camera-controls">
+                <button type="button" class="btn-shutter" id="btn-take-snapshot"></button>
+            </div>
+        </div>
+
+        <canvas id="camera-canvas" style="display: none;"></canvas>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/reception.js"></script>
+</body>
+</html>
