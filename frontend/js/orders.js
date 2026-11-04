@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const btnLogout = document.getElementById("btn-logout");
 
     const itemModal = document.getElementById("item-modal");
-    const aiModal = document.getElementById("ai-modal");
-    const assistantModal = document.getElementById("assistant-modal");
 
     let currentFilter = "ALL";
     let allOrders = [];
@@ -66,9 +64,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <option value="DELIVERED" ${o.status === 'DELIVERED' ? 'selected' : ''}>Preuzeto</option>
                     </select>
                 </div>
-                <div class="order-actions-row" style="grid-template-columns: 1fr 1fr 1fr;">
+                <div class="order-actions-row" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
                     <button type="button" class="btn-secondary btn-add-item" data-id="${o.id}">+ Stavka</button>
-                    <button type="button" class="btn-secondary btn-ai-diagnose" data-id="${o.id}">🤖 AI</button>
                     <button type="button" class="btn-secondary btn-open-pdf" data-id="${o.id}">📄 PDF</button>
                     <button type="button" class="btn-secondary" onclick="window.open('/status?token=${o.tracking_token}', '_blank')">Link</button>
                     <button type="button" class="btn-secondary btn-whatsapp" data-id="${o.id}">📱 WA</button>
@@ -78,17 +75,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         // Event listeneri
-        document.querySelectorAll(".btn-ai-diagnose").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const orderId = btn.getAttribute("data-id");
-                const order = allOrders.find(o => o.id === orderId);
-                document.getElementById("ai-symptoms").value = order?.complaint_description || "";
-                aiModal.setAttribute("data-order-id", orderId);
-                aiModal.classList.add("active");
-                document.getElementById("ai-symptoms").focus();
-            });
-        });
-
         document.querySelectorAll(".status-select-inline").forEach(sel => {
             sel.addEventListener("change", async (e) => {
                 const orderId = e.target.getAttribute("data-id");
@@ -245,81 +231,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // =====================================================
-    // 3. AI DIJAGNOSTIKA — Kopiraj u clipboard i otvori Gemini
-    // =====================================================
-    document.getElementById("btn-close-ai").addEventListener("click", () => aiModal.classList.remove("active"));
-
-    document.getElementById("btn-run-ai").addEventListener("click", async () => {
-        const symptoms = document.getElementById("ai-symptoms").value.trim();
-        if (!symptoms || symptoms.length < 10) {
-            showAlert("Unesite najmanje 10 znakova.", "error");
-            return;
-        }
-
-        const orderId = aiModal.getAttribute("data-order-id");
-        const order = allOrders.find(o => o.id === orderId);
-
-        let fullPrompt = `Dijagnostika kvara na vozilu:\n${symptoms}`;
-        if (order && order.vehicle) {
-            fullPrompt += `\n\nVozilo: ${order.vehicle.make} ${order.vehicle.model} (${order.vehicle.license_plate})`;
-        }
-        fullPrompt += "\n\nTi si iskusan auto-majstor. Predloži 3-5 mogućih uzroka kvara i preporuke za proveru. Odgovori na srpskom jeziku.";
-
-        try {
-            await navigator.clipboard.writeText(fullPrompt);
-            showAlert("✅ Pitanje kopirano! Otvaram Gemini...", "success");
-        } catch (err) {
-            const ta = document.createElement("textarea");
-            ta.value = fullPrompt;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand("copy");
-            document.body.removeChild(ta);
-            showAlert("✅ Pitanje kopirano! Otvaram Gemini...", "success");
-        }
-
-        window.open("https://gemini.google.com/app", "_blank");
-        aiModal.classList.remove("active");
-    });
-
-    // =====================================================
-    // 4. AI POMOĆNIK — Kopiraj u clipboard i otvori Gemini
-    // =====================================================
-    document.getElementById("btn-ai-assistant").addEventListener("click", () => {
-        assistantModal.classList.add("active");
-        document.getElementById("assistant-question").focus();
-    });
-
-    document.getElementById("btn-close-assistant").addEventListener("click", () => assistantModal.classList.remove("active"));
-
-    document.getElementById("btn-ask-assistant").addEventListener("click", async () => {
-        const question = document.getElementById("assistant-question").value.trim();
-        if (!question) return;
-
-        const vehicleContext = document.getElementById("assistant-vehicle").value.trim();
-        let fullPrompt = question;
-        if (vehicleContext) fullPrompt += `\n\nKontekst vozila: ${vehicleContext}`;
-        fullPrompt += "\n\nOdgovori kao iskusan auto-majstor, na srpskom jeziku.";
-
-        try {
-            await navigator.clipboard.writeText(fullPrompt);
-            showAlert("✅ Pitanje kopirano! Otvaram Gemini...", "success");
-        } catch (err) {
-            const ta = document.createElement("textarea");
-            ta.value = fullPrompt;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand("copy");
-            document.body.removeChild(ta);
-        }
-
-        window.open("https://gemini.google.com/app", "_blank");
-        assistantModal.classList.remove("active");
-        document.getElementById("assistant-question").value = "";
-    });
-
-    // =====================================================
-    // 5. FILTERI I POMOĆNE
+    // 3. FILTERI I POMOĆNE
     // =====================================================
     filterBtns.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -336,10 +248,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         setTimeout(() => alertBox.className = "status-alert", 5000);
     }
 
-    btnLogout.addEventListener("click", () => {
-        localStorage.removeItem("token");
-        location.reload();
-    });
+    if (btnLogout) {
+        btnLogout.addEventListener("click", () => {
+            localStorage.removeItem("token");
+            location.reload();
+        });
+    }
 
     loadOrders();
 });
