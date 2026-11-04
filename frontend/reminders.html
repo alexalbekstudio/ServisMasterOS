@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ServisMasterOS — SMS Podsetnici</title>
+    <link rel="icon" type="image/png" href="/static/img/logo-a.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/static/img/logo-a.png">
+</head>
+<body>
+    <header>
+        <div class="brand-wrapper">
+            <img src="/static/img/logo-a.png" alt="Logo" class="brand-logo">
+            <div class="brand-text-container">
+                <div class="brand-title-row">
+                    <h1>SMS & Podsetnici</h1>
+                    <span class="badge">Centar</span>
+                </div>
+                <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
+            </div>
+        </div>
+        <button id="btn-logout" class="btn-secondary header-logout-btn">Odjava</button>
+    </header>
+
+    <nav class="nav-links">
+        <a href="/" class="nav-link">Prijem Vozila</a>
+        <a href="/orders" class="nav-link">Nalozi u radu</a>
+        <a href="/dashboard" class="nav-link">Kontrolna Tabla</a>
+        <a href="/inventory" class="nav-link">Magacin</a>
+        <a href="/reminders" class="nav-link active">SMS Podsetnici</a>
+    </nav>
+
+    <main>
+        <div id="alert-box" class="status-alert"></div>
+
+        <section class="card">
+            <h2>Dospeli podsetnici za danas</h2>
+            <p class="reminders-desc">
+                Pokretanjem akcije, sistem proverava sve termine i šalje SMS/email vlasnicima.
+            </p>
+            <button id="btn-process-due" class="btn-primary btn-process-success">
+                Pošalji sve dospele podsetnike danas
+            </button>
+        </section>
+
+        <section class="card">
+            <h2>Dnevnik poslatih poruka</h2>
+            <div id="logs-list" class="logs-container">
+                <div class="empty-state-text">Učitavanje...</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/reminders.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ServisMasterOS — Status Popravke</title>
+    <link rel="icon" type="image/png" href="/static/img/logo-a.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/static/img/logo-a.png">
+</head>
+<body>
+    <header>
+        <div class="brand-wrapper">
+            <img src="/static/img/logo-a.png" alt="Logo" class="brand-logo">
+            <div class="brand-text-container">
+                <div class="brand-title-row">
+                    <h1>Status Popravke</h1>
+                    <span class="badge" id="order-badge">Nalog #...</span>
+                </div>
+                <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
+            </div>
+        </div>
+    </header>
+
+    <div id="status-loading" class="card" style="text-align: center; color: var(--text-muted);">
+        Učitavanje podataka...
+    </div>
+
+    <main id="status-content" style="display: none;">
+        <section class="card">
+            <div class="vehicle-header">
+                <div>
+                    <h2 id="vehicle-title" style="margin-bottom: 2px;">Marka i Model</h2>
+                    <span class="plate-pill" id="vehicle-plate">TABLICE</span>
+                </div>
+                <div class="status-indicator-badge" id="current-status-badge">U radu</div>
+            </div>
+
+            <div class="status-tracker">
+                <div class="step-item" id="step-RECEIVED"><div class="step-circle">1</div><div class="step-label">Prijem</div></div>
+                <div class="step-line" id="line-1"></div>
+                <div class="step-item" id="step-DIAGNOSING"><div class="step-circle">2</div><div class="step-label">Dijagnostika</div></div>
+                <div class="step-line" id="line-2"></div>
+                <div class="step-item" id="step-WAITING_FOR_PARTS"><div class="step-circle">3</div><div class="step-label">Čeka delove</div></div>
+                <div class="step-line" id="line-3"></div>
+                <div class="step-item" id="step-IN_PROGRESS"><div class="step-circle">4</div><div class="step-label">U radu</div></div>
+                <div class="step-line" id="line-4"></div>
+                <div class="step-item" id="step-COMPLETED"><div class="step-circle">5</div><div class="step-label">Završeno</div></div>
+                <div class="step-line" id="line-5"></div>
+                <div class="step-item" id="step-DELIVERED"><div class="step-circle">6</div><div class="step-label">Preuzeto</div></div>
+            </div>
+
+            <div class="order-dates-row">
+                <div>Prijem: <strong id="date-received">-</strong></div>
+                <div>Završetak: <strong id="date-completed">-</strong></div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Prijavljeni problem</h2>
+            <p id="complaint-text" style="color: var(--text-muted); font-size: 0.95rem;">-</p>
+        </section>
+
+        <section class="card" id="timeline-section" style="display: none;">
+            <h2>Vremenska linija</h2>
+            <div id="timeline-container" class="timeline"></div>
+        </section>
+
+        <section class="card" id="approval-section" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <span style="font-size: 1.2rem;">⚠️</span>
+                <h2 style="color: var(--warning); margin: 0; font-size: 1rem;">Potrebna saglasnost</h2>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+                Majstor je uočio dodatne radove. Molimo odobrite ili odbijte:
+            </p>
+            <div id="approval-items-container"></div>
+        </section>
+
+        <section class="card">
+            <h2>Urađeni radovi i delovi</h2>
+            <div id="items-list" class="items-table-wrapper"></div>
+            <div class="total-row">
+                <span>Ukupno:</span>
+                <span class="total-amount" id="total-amount">0.00 RSD</span>
+            </div>
+            <div id="ips-qr-card" class="ips-qr-box" style="display: none;">
+                <div class="ips-qr-header">
+                    <span>⚡ Instant plaćanje (NBS IPS)</span>
+                </div>
+                <div class="ips-qr-body">
+                    <img id="ips-qr-image" src="" alt="IPS QR" class="ips-qr-img">
+                    <div class="ips-qr-instructions">
+                        Skenirajte kod bankovnom aplikacijom.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card" id="photos-section" style="display: none;">
+            <h2>Foto-dokumentacija</h2>
+            <div id="photos-grid" class="photos-grid"></div>
+        </section>
+    </main>
+
+    <script src="/static/js/status.js"></script>
+</body>
+</html>

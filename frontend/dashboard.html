@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ServisMasterOS — Kontrolna Tabla</title>
+    <link rel="icon" type="image/png" href="/static/img/logo-a.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/static/img/logo-a.png">
+</head>
+<body>
+    <header>
+        <div class="brand-wrapper">
+            <img src="/static/img/logo-a.png" alt="Logo" class="brand-logo">
+            <div class="brand-text-container">
+                <div class="brand-title-row">
+                    <h1>Kontrolna Tabla</h1>
+                    <span class="badge">KPI</span>
+                </div>
+                <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
+            </div>
+        </div>
+        <button id="btn-logout" class="btn-secondary header-logout-btn">Odjava</button>
+    </header>
+
+    <nav class="nav-links">
+        <a href="/" class="nav-link">Prijem Vozila</a>
+        <a href="/orders" class="nav-link">Nalozi u radu</a>
+        <a href="/dashboard" class="nav-link active">Kontrolna Tabla</a>
+        <a href="/inventory" class="nav-link">Magacin</a>
+        <a href="/reminders" class="nav-link">SMS Podsetnici</a>
+    </nav>
+
+    <main>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-label">Prihod ovog meseca</span>
+                <div class="kpi-value" id="kpi-monthly-rev">0 RSD</div>
+                <span class="kpi-sub" id="kpi-completed-orders">0 završenih naloga</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Prosečan račun (AOV)</span>
+                <div class="kpi-value" id="kpi-avg-ticket">0 RSD</div>
+                <span class="kpi-sub">po radnom nalogu</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Trenutno u radu</span>
+                <div class="kpi-value kpi-value-warning" id="kpi-active-orders">0</div>
+                <span class="kpi-sub">vozila na dizalici</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Ukupan promet servisa</span>
+                <div class="kpi-value kpi-value-success" id="kpi-all-time">0 RSD</div>
+                <span class="kpi-sub">kumulativno</span>
+            </div>
+        </div>
+
+        <section class="card">
+            <h2>Struktura prihoda</h2>
+            <div class="ratio-bar">
+                <div id="bar-labor" class="ratio-labor"></div>
+                <div id="bar-parts" class="ratio-parts"></div>
+            </div>
+            <div class="ratio-legend">
+                <span>🔵 Rad: <strong id="val-labor">0 RSD</strong></span>
+                <span>🟠 Delovi: <strong id="val-parts">0 RSD</strong></span>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Najčešći modeli u servisu</h2>
+            <div id="top-makes-list" class="top-makes-container">
+                <div class="empty-state-text">Učitavanje...</div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="section-header-flex">
+                <h2>👨‍🔧 Učinak majstora</h2>
+                <select id="mechanics-period" class="search-input-compact" style="width: auto;">
+                    <option value="7">7 dana</option>
+                    <option value="30" selected>30 dana</option>
+                    <option value="90">90 dana</option>
+                </select>
+            </div>
+            <div id="mechanics-list">
+                <div class="empty-state-text">Učitavanje...</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ServisMasterOS — Magacin</title>
+    <link rel="icon" type="image/png" href="/static/img/logo-a.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/static/img/logo-a.png">
+    <script src="https://unpkg.com/@zxing/library@0.20.0/umd/index.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="brand-wrapper">
+            <img src="/static/img/logo-a.png" alt="Logo" class="brand-logo">
+            <div class="brand-text-container">
+                <div class="brand-title-row">
+                    <h1>Magacin & Lager</h1>
+                    <span class="badge">Zalihe</span>
+                </div>
+                <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
+            </div>
+        </div>
+        <button id="btn-logout" class="btn-secondary header-logout-btn">Odjava</button>
+    </header>
+
+    <nav class="nav-links">
+        <a href="/" class="nav-link">Prijem Vozila</a>
+        <a href="/orders" class="nav-link">Nalozi u radu</a>
+        <a href="/dashboard" class="nav-link">Kontrolna Tabla</a>
+        <a href="/inventory" class="nav-link active">Magacin</a>
+        <a href="/reminders" class="nav-link">SMS Podsetnici</a>
+    </nav>
+
+    <main>
+        <section class="card">
+            <div class="section-header-flex">
+                <h2>+ Unos artikla na stanje</h2>
+                <button type="button" class="btn-primary btn-scanner-trigger" id="btn-open-scanner">
+                    📷 Skeniraj Barkod / QR
+                </button>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="part-sku">Šifra artikla / Barkod (SKU)</label>
+                    <input type="text" id="part-sku" placeholder="npr. 4011558000123">
+                </div>
+                <div class="form-group">
+                    <label for="part-name">Naziv dela</label>
+                    <input type="text" id="part-name" placeholder="npr. Filter ulja Mann W712">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="part-selling">Prodajna cijena (RSD)</label>
+                    <input type="number" id="part-selling" placeholder="npr. 1200">
+                </div>
+                <div class="form-group">
+                    <label for="part-qty">Količina za upis</label>
+                    <input type="number" id="part-qty" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="part-min">Kritični minimum</label>
+                    <input type="number" id="part-min" value="2">
+                </div>
+            </div>
+            <button type="button" class="btn-primary" id="btn-save-part">Upiši na lager</button>
+        </section>
+
+        <section class="card">
+            <div class="section-header-flex">
+                <h2>Stanje zaliha</h2>
+                <input type="text" id="part-search" class="search-input-compact" placeholder="🔍 Brza pretraga...">
+            </div>
+            <div id="parts-list">
+                <div class="empty-state-text">Učitavanje...</div>
+            </div>
+        </section>
+
+        <!-- Scanner modal -->
+        <div id="scanner-modal" class="scanner-modal">
+            <div class="scanner-card">
+                <div class="scanner-modal-header">
+                    <h3 class="scanner-title">📷 Skeniranje koda</h3>
+                    <button type="button" id="btn-close-scanner" class="btn-secondary scanner-close-btn">✕</button>
+                </div>
+                <video id="reader" style="width: 100%; border-radius: var(--radius-md); background: #000;" autoplay muted playsinline></video>
+                <div id="scanner-status" style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin: 10px 0;">Usmerite kameru na barkod...</div>
+                <div class="file-fallback-box" style="margin-top: 10px;">
+                    <label class="file-fallback-label" for="scan-file-input">Ili učitajte sliku koda:</label>
+                    <input type="file" id="scan-file-input" class="file-input-full" accept="image/*">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/inventory.js"></script>
+</body>
+</html>
