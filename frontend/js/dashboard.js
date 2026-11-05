@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const btnLogout = document.getElementById("btn-logout");
 
+    // =====================================================
+    // 1. KPI + STRUKTURA PRIHODA (postojeće)
+    // =====================================================
     async function loadAnalytics() {
         try {
             const res = await fetch("/api/v1/analytics/summary", {
@@ -11,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
             const data = await res.json();
-            
+
             document.getElementById("kpi-monthly-rev").textContent = formatRSD(data.monthly_revenue);
             document.getElementById("kpi-completed-orders").textContent = `${data.monthly_completed_count} završenih naloga`;
             document.getElementById("kpi-avg-ticket").textContent = formatRSD(data.average_ticket);
@@ -60,14 +63,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const res = await fetch(`/api/v1/analytics/mechanics?period_days=${days}`, {
                 headers: ApiService.getHeaders(),
             });
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                throw new Error(err.detail || "Greška pri učitavanju.");
-            }
+            if (!res.ok) throw new Error("Greška pri učitavanju.");
 
             const data = await res.json();
-            console.log("Mechanics data:", data);
-
             if (!data.mechanics || data.mechanics.length === 0) {
                 listContainer.innerHTML = `<div class="empty-state-text">Nema majstora u sistemu.</div>`;
                 return;
@@ -95,6 +93,204 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    // =====================================================
+    // 2. GRAFIKONI
+    // =====================================================
+    async function loadMonthlyRevenueChart() {
+        try {
+            const res = await fetch("/api/v1/analytics/charts/monthly-revenue?months=12", {
+                headers: ApiService.getHeaders()
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+
+            const ctx = document.getElementById("chart-monthly-revenue");
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: "Prihod (RSD)",
+                        data: data.values,
+                        borderColor: "#d97706",
+                        backgroundColor: "rgba(217, 119, 6, 0.1)",
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: "#d97706",
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => formatRSD(ctx.parsed.y)
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: (val) => (val / 1000).toFixed(0) + "k"
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (e) { console.error("Chart greška:", e); }
+    }
+
+    async function loadOrderStatusesChart() {
+        try {
+            const res = await fetch("/api/v1/analytics/charts/order-statuses", {
+                headers: ApiService.getHeaders()
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+
+            const ctx = document.getElementById("chart-order-statuses");
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values,
+                        backgroundColor: [
+                            "#3b82f6", // Prijem
+                            "#f59e0b", // Dijagnostika
+                            "#ef4444", // Čeka delove
+                            "#8b5cf6", // U radu
+                            "#10b981", // Završeno
+                            "#059669", // Preuzeto
+                            "#6b7280", // Otkazano
+                        ],
+                        borderWidth: 2,
+                        borderColor: "#ffffff",
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "right",
+                            labels: { font: { size: 12 } }
+                        }
+                    }
+                }
+            });
+        } catch (e) { console.error("Chart greška:", e); }
+    }
+
+    async function loadTopPartsChart() {
+        try {
+            const res = await fetch("/api/v1/analytics/charts/top-parts?limit=5", {
+                headers: ApiService.getHeaders()
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+
+            const ctx = document.getElementById("chart-top-parts");
+            if (!ctx) return;
+
+            if (data.labels.length === 0) {
+                ctx.parentElement.innerHTML = '<div class="empty-state-text">Nema podataka o prodaji delova.</div>';
+                return;
+            }
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: "Količina",
+                        data: data.values,
+                        backgroundColor: "#d97706",
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        },
+                        x: {
+                            ticks: {
+                                callback: function(val) {
+                                    const label = this.getLabelForValue(val);
+                                    return label.length > 20 ? label.substring(0, 20) + "..." : label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (e) { console.error("Chart greška:", e); }
+    }
+
+    async function loadMechanicsChart() {
+        try {
+            const res = await fetch("/api/v1/analytics/mechanics?period_days=30", {
+                headers: ApiService.getHeaders()
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+
+            const ctx = document.getElementById("chart-mechanics");
+            if (!ctx) return;
+
+            if (!data.mechanics || data.mechanics.length === 0) {
+                ctx.parentElement.innerHTML = '<div class="empty-state-text">Nema podataka o majstorima.</div>';
+                return;
+            }
+
+            const labels = data.mechanics.map(m => m.mechanic_name);
+            const values = data.mechanics.map(m => m.total_revenue);
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Prihod (RSD)",
+                        data: values,
+                        backgroundColor: "#10b981",
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: (val) => (val / 1000).toFixed(0) + "k"
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (e) { console.error("Chart greška:", e); }
+    }
+
+    // =====================================================
+    // 3. POMOĆNE
+    // =====================================================
     function formatRSD(num) {
         return (num || 0).toLocaleString("sr-RS", { maximumFractionDigits: 0 }) + " RSD";
     }
@@ -115,6 +311,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // Init
     loadAnalytics();
     loadMechanicsPerformance();
+    loadMonthlyRevenueChart();
+    loadOrderStatusesChart();
+    loadTopPartsChart();
+    loadMechanicsChart();
 });

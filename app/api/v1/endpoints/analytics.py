@@ -161,3 +161,113 @@ def get_mechanics_performance(
         "start_date": start_date.isoformat(),
         "mechanics": results,
     }
+
+@router.get("/charts/monthly-revenue", response_model=Dict[str, Any])
+def get_monthly_revenue_chart(
+    db: Session = Depends(get_db),
+    shop_id: UUID = Depends(get_current_shop_id),
+    months: int = 12,
+) -> Any:
+    """Vraća prihod po mesecima za poslednjih N meseci."""
+    now = datetime.now(timezone.utc)
+    start_date = now - timedelta(days=months * 31)
+
+    completion_date_col = func.coalesce(
+        WorkOrder.completed_at, WorkOrder.updated_at, WorkOrder.created_at
+    )
+
+    orders = (
+        db.query(WorkOrder)
+        .filter(
+            WorkOrder.shop_id == shop_id,
+            WorkOrder.status.in_([WorkOrderStatus.COMPLETED, WorkOrderStatus.DELIVERED]),
+            completion_date_col >= start_date,
+        )
+        .all()
+    )
+
+    # Grupisanje po mesecima
+    monthly_data = {}
+    for i in range(months):
+        month_date = now - timedelta(days=30 * (months - 1 - i))
+        key = month_date.strftime("%Y-%m")
+        monthly_data[key] = 0.0
+
+    for o in orders:
+        date = o.completed_at or o.updated_at or o.created_at
+        if date:
+            key = date.strftime("%Y-%m")
+            if key in monthly_data:
+                monthly_data[key] += float(o.total_amount or 0)
+
+    # Sortiraj po mesecima
+    sorted_keys = sorted(monthly_data.keys())
+    labels = [k.split("-")[1] + "/" + k.split("-")[0][2:] for k in sorted_keys]
+    values = [monthly_data[k] for k in sorted_keys]
+
+    return {"labels": labels, "values": values}
+
+
+@router.get("/charts/order-statuses", response_model=Dict[str, Any])
+def get_order_statuses_chart(
+    db: Session = Depends(get_db),
+    shop_id: UUID = Depends(get_current_shop_id),
+) -> Any:
+    """Vraća broj naloga po statusu."""
+    results = (
+        db.query(WorkOrder.status, func.count(WorkOrder.id))
+        .filter(WorkOrder.shop_id == shop_id)
+        .group_by(WorkOrder.status)
+        .all()
+    )
+
+    STATUS_LABELS = {
+        "RECEIVED": "Prijem",
+        "DIAGNOSING": "Dijagnostika",
+        "WAITING_FOR_PARTS": "Čeka delove",
+        "IN_PROGRESS": "U radu",
+        "COMPLETED": "Završeno",
+        "DELIVERED": "Preuzeto",
+        "CANCELLED": "Otkazano",
+    }
+
+    labels = []
+    values = []
+    for status, count in results:
+        status_val = status.value if hasattr(status, "value") else str(status)
+        labels.append(STATUS_LABELS.get(status_val, status_val))
+        values.append(count)
+
+    return {"labels": labels, "values": values}
+
+
+@router.get("/charts/top-parts", response_model=Dict[str, Any])
+def get_top_parts_chart(
+    db: Session = Depends(get_db),
+    shop_id: UUID = Depends(get_current_shop_id),
+    limit: int = 5,
+) -> Any:
+    """Vraća top N najprodavanijih delova (po količini)."""
+    from app.models.work_order import WorkOrder, WorkOrderItem
+
+    results = (
+        db.query(
+            WorkOrderItem.title,
+            func.sum(WorkOrderItem.quantity).label("total_qty"),
+        )
+        .join(WorkOrder, WorkOrderItem.work_order_id == WorkOrder.id)
+        .filter(
+            WorkOrder.shop_id == shop_id,
+            WorkOrderItem.is_part == True,
+            WorkOrder.status.in_([WorkOrderStatus.COMPLETED, WorkOrderStatus.DELIVERED]),
+        )
+        .group_by(WorkOrderItem.title)
+        .order_by(func.sum(WorkOrderItem.quantity).desc())
+        .limit(limit)
+        .all()
+    )
+
+    labels = [r[0] for r in results]
+    values = [float(r[1]) for r in results]
+
+    return {"labels": labels, "values": values}

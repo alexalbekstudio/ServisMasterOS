@@ -24,25 +24,25 @@
                 <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
             </div>
         </div>
-        <button id="btn-logout" class="btn-secondary header-logout-btn">Odjava</button>
+        <button id="btn-logout" class="btn-secondary header-logout-btn" data-i18n="header.logout">Odjava</button>
     </header>
 
     <nav class="nav-links">
-        <a href="/" class="nav-link">Prijem Vozila</a>
-        <a href="/orders" class="nav-link active">Nalozi u radu</a>
-        <a href="/dashboard" class="nav-link">Kontrolna Tabla</a>
-        <a href="/inventory" class="nav-link">Magacin</a>
-        <a href="/reminders" class="nav-link">SMS Podsetnici</a>
+        <a href="/" class="nav-link" data-i18n="nav.reception">Prijem Vozila</a>
+        <a href="/orders" class="nav-link active" data-i18n="nav.orders">Nalozi u radu</a>
+        <a href="/dashboard" class="nav-link" data-i18n="nav.dashboard">Kontrolna Tabla</a>
+        <a href="/inventory" class="nav-link" data-i18n="nav.inventory">Magacin</a>
+        <a href="/reminders" class="nav-link" data-i18n="nav.reminders">SMS Podsetnici</a>
     </nav>
 
     <main>
         <div id="alert-box" class="status-alert"></div>
 
         <div class="filters-row">
-            <button class="filter-btn active" data-status="ALL">Svi nalozi</button>
-            <button class="filter-btn" data-status="RECEIVED">Prijem</button>
-            <button class="filter-btn" data-status="IN_PROGRESS">U radu</button>
-            <button class="filter-btn" data-status="COMPLETED">Završeno</button>
+            <button class="filter-btn active" data-status="ALL" data-i18n="orders.filter_all">Svi nalozi</button>
+            <button class="filter-btn" data-status="RECEIVED" data-i18n="orders.filter_received">Prijem</button>
+            <button class="filter-btn" data-status="IN_PROGRESS" data-i18n="orders.filter_in_progress">U radu</button>
+            <button class="filter-btn" data-status="COMPLETED" data-i18n="orders.filter_completed">Završeno</button>
         </div>
 
         <div id="orders-list">
@@ -100,5 +100,6 @@
     <script src="/static/js/api.js"></script>
     <script src="/static/js/orders.js"></script>
     <script src="/static/js/help.js"></script>
+    <script src="/static/js/i18n.js"></script>
 </body>
 </html>

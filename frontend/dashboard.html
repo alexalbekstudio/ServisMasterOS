@@ -23,43 +23,43 @@
                 <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
             </div>
         </div>
-        <button id="btn-logout" class="btn-secondary header-logout-btn">Odjava</button>
+        <button id="btn-logout" class="btn-secondary header-logout-btn" data-i18n="header.logout">Odjava</button>
     </header>
 
     <nav class="nav-links">
-        <a href="/" class="nav-link">Prijem Vozila</a>
-        <a href="/orders" class="nav-link">Nalozi u radu</a>
-        <a href="/dashboard" class="nav-link active">Kontrolna Tabla</a>
-        <a href="/inventory" class="nav-link">Magacin</a>
-        <a href="/reminders" class="nav-link">SMS Podsetnici</a>
+        <a href="/" class="nav-link" data-i18n="nav.reception">Prijem Vozila</a>
+        <a href="/orders" class="nav-link" data-i18n="nav.orders">Nalozi u radu</a>
+        <a href="/dashboard" class="nav-link active" data-i18n="nav.dashboard">Kontrolna Tabla</a>
+        <a href="/inventory" class="nav-link" data-i18n="nav.inventory">Magacin</a>
+        <a href="/reminders" class="nav-link" data-i18n="nav.reminders">SMS Podsetnici</a>
     </nav>
 
     <main>
         <div class="kpi-grid">
             <div class="kpi-card">
-                <span class="kpi-label">Prihod ovog meseca</span>
+                <span class="kpi-label" data-i18n="dashboard.monthly_revenue">Prihod ovog meseca</span>
                 <div class="kpi-value" id="kpi-monthly-rev">0 RSD</div>
                 <span class="kpi-sub" id="kpi-completed-orders">0 završenih naloga</span>
             </div>
             <div class="kpi-card">
-                <span class="kpi-label">Prosečan račun (AOV)</span>
+                <span class="kpi-label" data-i18n="dashboard.avg_ticket">Prosečan račun (AOV)</span>
                 <div class="kpi-value" id="kpi-avg-ticket">0 RSD</div>
                 <span class="kpi-sub">po radnom nalogu</span>
             </div>
             <div class="kpi-card">
-                <span class="kpi-label">Trenutno u radu</span>
+                <span class="kpi-label" data-i18n="dashboard.active_orders">Trenutno u radu</span>
                 <div class="kpi-value kpi-value-warning" id="kpi-active-orders">0</div>
                 <span class="kpi-sub">vozila na dizalici</span>
             </div>
             <div class="kpi-card">
-                <span class="kpi-label">Ukupan promet servisa</span>
+                <span class="kpi-label" data-i18n="dashboard.all_time">Ukupan promet servisa</span>
                 <div class="kpi-value kpi-value-success" id="kpi-all-time">0 RSD</div>
                 <span class="kpi-sub">kumulativno</span>
             </div>
         </div>
 
         <section class="card">
-            <h2>Struktura prihoda</h2>
+            <h2 data-i18n="dashboard.revenue_structure">Struktura prihoda</h2>
             <div class="ratio-bar">
                 <div id="bar-labor" class="ratio-labor"></div>
                 <div id="bar-parts" class="ratio-parts"></div>
@@ -71,7 +71,7 @@
         </section>
 
         <section class="card">
-            <h2>Najčešći modeli u servisu</h2>
+            <h2 data-i18n="dashboard.top_makes">Najčešći modeli u servisu</h2>
             <div id="top-makes-list" class="top-makes-container">
                 <div class="empty-state-text">Učitavanje...</div>
             </div>
@@ -79,7 +79,7 @@
 
         <section class="card">
             <div class="section-header-flex">
-                <h2>👨‍🔧 Učinak majstora</h2>
+                <h2 data-i18n="dashboard.mechanics">👨‍🔧 Učinak majstora</h2>
                 <select id="mechanics-period" class="search-input-compact" style="width: auto;">
                     <option value="7">7 dana</option>
                     <option value="30" selected>30 dana</option>
@@ -90,10 +90,44 @@
                 <div class="empty-state-text">Učitavanje...</div>
             </div>
         </section>
+
+                <!-- GRAFIKON: PRIHOD PO MESECIMA -->
+        <section class="card">
+            <h2 data-i18n="dashboard.monthly_chart">📈 Prihod po mesecima</h2>
+            <div style="position: relative; height: 280px;">
+                <canvas id="chart-monthly-revenue"></canvas>
+            </div>
+        </section>
+
+        <!-- GRAFIKON: STATUSI NALOGA -->
+        <section class="card">
+            <h2>📊 Statusi naloga</h2>
+            <div style="position: relative; height: 280px;">
+                <canvas id="chart-order-statuses"></canvas>
+            </div>
+        </section>
+
+        <!-- GRAFIKON: TOP 5 DELOVA -->
+        <section class="card">
+            <h2>⚙️ Top 5 najprodavanijih delova</h2>
+            <div style="position: relative; height: 280px;">
+                <canvas id="chart-top-parts"></canvas>
+            </div>
+        </section>
+
+        <!-- GRAFIKON: UČINAK MAJSTORA -->
+        <section class="card">
+            <h2>👨‍🔧 Prihod po majstoru</h2>
+            <div style="position: relative; height: 280px;">
+                <canvas id="chart-mechanics"></canvas>
+            </div>
+        </section>
     </main>
 
     <script src="/static/js/api.js"></script>
     <script src="/static/js/dashboard.js"></script>
     <script src="/static/js/help.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="/static/js/i18n.js"></script>
 </body>
 </html>

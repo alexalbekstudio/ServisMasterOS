@@ -24,22 +24,22 @@
                 <img src="/static/img/logo-text.png" alt="Studio" class="brand-subtext-img">
             </div>
         </div>
-        <button id="btn-logout" class="btn-secondary header-logout-btn">Odjava</button>
+        <button id="btn-logout" class="btn-secondary header-logout-btn" data-i18n="header.logout">Odjava</button>
     </header>
 
     <nav class="nav-links">
-        <a href="/" class="nav-link active">Prijem Vozila</a>
-        <a href="/orders" class="nav-link">Nalozi u radu</a>
-        <a href="/dashboard" class="nav-link">Kontrolna Tabla</a>
-        <a href="/inventory" class="nav-link">Magacin</a>
-        <a href="/reminders" class="nav-link">SMS Podsetnici</a>
+        <a href="/" class="nav-link active" data-i18n="nav.reception">Prijem Vozila</a>
+        <a href="/orders" class="nav-link" data-i18n="nav.orders">Nalozi u radu</a>
+        <a href="/dashboard" class="nav-link" data-i18n="nav.dashboard">Kontrolna Tabla</a>
+        <a href="/inventory" class="nav-link" data-i18n="nav.inventory">Magacin</a>
+        <a href="/reminders" class="nav-link" data-i18n="nav.reminders">SMS Podsetnici</a>
     </nav>
 
     <div id="alert-box" class="status-alert"></div>
 
     <main>
         <section class="card">
-            <h2>1. Podaci o vlasniku</h2>
+            <h2 data-i18n="reception.customer_section">1. Podaci o vlasniku</h2>
             <input type="hidden" id="selected-customer-id">
             <div class="form-group search-wrapper">
                 <label for="customer-search">Pretraga postojećeg klijenta</label>
@@ -61,7 +61,7 @@
         </section>
 
         <section class="card">
-            <h2>2. Vozilo</h2>
+            <h2 data-i18n="reception.vehicle_section">2. Vozilo</h2>
             <div class="ocr-box">
                 <div class="ocr-title">📷 Skeniraj saobraćajnu</div>
                 <div class="ocr-subtitle">Automatski prepoznaje tablice, VIN i marku.</div>
@@ -108,7 +108,7 @@
         </section>
 
         <section class="card">
-            <h2>3. Zapisnik oštećenja karoserije</h2>
+            <h2 data-i18n="reception.damage_section">3. Zapisnik oštećenja karoserije</h2>
             <p class="ocr-subtitle">Kliknite na dijagram da označite oštećenje:</p>
 
             <div class="damage-diagram-card">
@@ -150,7 +150,7 @@
         </section>
 
         <section class="card">
-            <h2>4. Zahtev klijenta & Prijem</h2>
+            <h2 data-i18n="reception.request_section">4. Zahtev klijenta & Prijem</h2>
             <div class="row">
                 <div class="form-group">
                     <label for="order-mileage">Kilometraža (km)</label>
@@ -176,7 +176,7 @@
             </div>
         </section>
 
-        <button type="button" class="btn-primary btn-submit-order" id="btn-submit-order">
+        <button type="button" class="btn-primary btn-submit-order" id="btn-submit-order" data-i18n="reception.submit">
             Kreiraj Radni Nalog
         </button>
 
@@ -204,5 +204,6 @@
     <script src="/static/js/api.js"></script>
     <script src="/static/js/reception.js"></script>
     <script src="/static/js/help.js"></script>
+    <script src="/static/js/i18n.js"></script>
 </body>
 </html>

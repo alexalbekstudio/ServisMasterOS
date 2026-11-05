@@ -107,3 +107,52 @@ def delete_customer(
         raise HTTPException(status_code=404, detail="Klijent nije pronađen.")
     db.delete(customer)
     db.commit()
+
+@router.get("/export/csv")
+def export_customers_csv(
+    db: Session = Depends(get_db),
+    shop_id: UUID = Depends(get_current_shop_id),
+):
+    """Izvoz klijenata u CSV format."""
+    import csv
+    import io
+    from fastapi.responses import StreamingResponse
+
+    customers = (
+        db.query(Customer)
+        .filter(Customer.shop_id == shop_id)
+        .order_by(Customer.full_name)
+        .all()
+    )
+
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";")
+
+    # Header
+    writer.writerow([
+        "Ime i prezime", "Telefon", "Email", "Firma",
+        "Naziv firme", "PIB", "Beleške", "Datum kreiranja"
+    ])
+
+    # Rows
+    for c in customers:
+        writer.writerow([
+            c.full_name or "",
+            c.phone or "",
+            c.email or "",
+            "Da" if c.is_company else "Ne",
+            c.company_name or "",
+            c.pib or "",
+            (c.notes or "").replace("\n", " "),
+            c.created_at.strftime("%d.%m.%Y") if c.created_at else "",
+        ])
+
+    output.seek(0)
+    # BOM za Excel (da ispravno prikaže naša slova)
+    content = "\ufeff" + output.getvalue()
+
+    return StreamingResponse(
+        iter([content]),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="klijenti.csv"'},
+    )

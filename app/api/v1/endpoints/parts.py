@@ -108,3 +108,45 @@ def update_part(
     db.commit()
     db.refresh(part)
     return part
+
+@router.get("/export/csv")
+def export_parts_csv(
+    db: Session = Depends(get_db),
+    shop_id: UUID = Depends(get_current_shop_id),
+):
+    """Izvoz magacina u CSV format."""
+    import csv
+    import io
+    from fastapi.responses import StreamingResponse
+
+    parts = (
+        db.query(Part)
+        .filter(Part.shop_id == shop_id)
+        .order_by(Part.name)
+        .all()
+    )
+
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";")
+
+    writer.writerow([
+        "SKU", "Naziv", "Prodajna cena (RSD)", "Količina", "Minimum"
+    ])
+
+    for p in parts:
+        writer.writerow([
+            p.sku or "",
+            p.name or "",
+            float(p.selling_price or 0),
+            p.quantity or 0,
+            p.min_quantity or 0,
+        ])
+
+    output.seek(0)
+    content = "\ufeff" + output.getvalue()
+
+    return StreamingResponse(
+        iter([content]),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="magacin.csv"'},
+    )

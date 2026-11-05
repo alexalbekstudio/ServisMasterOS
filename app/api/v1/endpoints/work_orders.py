@@ -445,3 +445,65 @@ def client_decision_on_item(
         "is_approved": item.is_approved,
         "new_total": work_order.total_amount,
     }
+
+@router.get("/export/csv")
+def export_work_orders_csv(
+    db: Session = Depends(get_db),
+    shop_id: UUID = Depends(get_current_shop_id),
+):
+    """Izvoz radnih naloga u CSV format."""
+    import csv
+    import io
+    from fastapi.responses import StreamingResponse
+
+    orders = (
+        db.query(WorkOrder)
+        .filter(WorkOrder.shop_id == shop_id)
+        .order_by(WorkOrder.created_at.desc())
+        .all()
+    )
+
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";")
+
+    writer.writerow([
+        "Broj naloga", "Datum", "Vozilo", "Tablice", "Kilometraža",
+        "Status", "Opis kvara", "Rad (RSD)", "Delovi (RSD)", "Ukupno (RSD)"
+    ])
+
+    for o in orders:
+        vehicle = db.query(Vehicle).filter(Vehicle.id == o.vehicle_id).first()
+        vehicle_name = f"{vehicle.make} {vehicle.model}" if vehicle else ""
+        plate = vehicle.license_plate if vehicle else ""
+
+        status_label = {
+            "RECEIVED": "Prijem",
+            "DIAGNOSING": "Dijagnostika",
+            "WAITING_FOR_PARTS": "Čeka delove",
+            "IN_PROGRESS": "U radu",
+            "COMPLETED": "Završeno",
+            "DELIVERED": "Preuzeto",
+            "CANCELLED": "Otkazano",
+        }.get(o.status.value if hasattr(o.status, "value") else str(o.status), "")
+
+        writer.writerow([
+            o.order_number,
+            o.created_at.strftime("%d.%m.%Y") if o.created_at else "",
+            vehicle_name,
+            plate,
+            o.mileage_at_reception or 0,
+            status_label,
+            (o.complaint_description or "").replace("\n", " "),
+            float(o.total_labor or 0),
+            float(o.total_parts or 0),
+            float(o.total_amount or 0),
+        ])
+
+    output.seek(0)
+    content = "\ufeff" + output.getvalue()
+
+    return StreamingResponse(
+        iter([content]),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="radni_nalozi.csv"'},
+    )

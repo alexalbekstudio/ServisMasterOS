@@ -223,6 +223,44 @@ document.addEventListener("DOMContentLoaded", async () => {
         }[s] || s));
     }
 
+    // ============================================
+    // EXPORT PODATAKA
+    // ============================================
+    async function downloadCsv(url, filename) {
+        try {
+            const res = await fetch(url, {
+                headers: ApiService.getHeaders(),
+            });
+            if (!res.ok) throw new Error("Greška pri exportu.");
+
+            const blob = await res.blob();
+            const fileUrl = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = fileUrl;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(fileUrl);
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+
+    document.getElementById("export-customers").addEventListener("click", () => {
+        downloadCsv("/api/v1/customers/export/csv", "klijenti.csv");
+    });
+
+    document.getElementById("export-vehicles").addEventListener("click", () => {
+        downloadCsv("/api/v1/vehicles/export/csv", "vozila.csv");
+    });
+
+    document.getElementById("export-orders").addEventListener("click", () => {
+        downloadCsv("/api/v1/work-orders/export/csv", "radni_nalozi.csv");
+    });
+
+    document.getElementById("export-parts").addEventListener("click", () => {
+        downloadCsv("/api/v1/parts/export/csv", "magacin.csv");
+    });
+
     // Init
     loadStats();
     loadShops();

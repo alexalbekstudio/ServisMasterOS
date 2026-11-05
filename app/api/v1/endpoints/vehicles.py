@@ -114,3 +114,49 @@ def get_vehicle_service_history(
         })
 
     return history
+
+@router.get("/export/csv")
+def export_vehicles_csv(
+    db: Session = Depends(get_db),
+    shop_id: UUID = Depends(get_current_shop_id),
+):
+    """Izvoz vozila u CSV format."""
+    import csv
+    import io
+    from fastapi.responses import StreamingResponse
+
+    vehicles = (
+        db.query(Vehicle)
+        .filter(Vehicle.shop_id == shop_id)
+        .order_by(Vehicle.license_plate)
+        .all()
+    )
+
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";")
+
+    writer.writerow([
+        "Registracija", "Marka", "Model", "VIN", "Godina",
+        "Gorivo", "Kilometraža", "Datum registracije"
+    ])
+
+    for v in vehicles:
+        writer.writerow([
+            v.license_plate or "",
+            v.make or "",
+            v.model or "",
+            v.vin or "",
+            v.year_of_manufacture or "",
+            v.fuel_type or "",
+            v.current_mileage or 0,
+            v.last_registered_at.strftime("%d.%m.%Y") if v.last_registered_at else "",
+        ])
+
+    output.seek(0)
+    content = "\ufeff" + output.getvalue()
+
+    return StreamingResponse(
+        iter([content]),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="vozila.csv"'},
+    )

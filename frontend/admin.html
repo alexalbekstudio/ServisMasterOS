@@ -58,6 +58,30 @@
                 <div class="empty-state-text">Učitavanje...</div>
             </div>
         </section>
+
+                <!-- EXPORT PODATAKA -->
+        <section class="card">
+            <h2>📥 Export podataka</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">
+                Preuzmite podatke u CSV formatu (otvara se u Excel-u, Google Sheets).
+            </p>
+            <div class="row">
+                <button type="button" class="btn-secondary" id="export-customers">
+                    📥 Klijenti (CSV)
+                </button>
+                <button type="button" class="btn-secondary" id="export-vehicles">
+                    📥 Vozila (CSV)
+                </button>
+            </div>
+            <div class="row">
+                <button type="button" class="btn-secondary" id="export-orders">
+                    📥 Radni nalozi (CSV)
+                </button>
+                <button type="button" class="btn-secondary" id="export-parts">
+                    📥 Magacin (CSV)
+                </button>
+            </div>
+        </section>
     </main>
 
     <!-- Modal za izmenu pretplate -->
@@ -106,5 +130,6 @@
     <script src="/static/js/api.js"></script>
     <script src="/static/js/admin.js"></script>
     <script src="/static/js/help.js"></script>
+    <script src="/static/js/i18n.js"></script>
 </body>
 </html>
