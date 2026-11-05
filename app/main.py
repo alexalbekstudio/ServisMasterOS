@@ -1,8 +1,12 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
-from pathlib import Path
+# ✅ Učitaj .env PRE bilo kog drugog importa
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(dotenv_path=str(BASE_DIR / ".env"), override=True)
 
+# Sada učitaj ostalo
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse

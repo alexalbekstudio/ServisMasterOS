@@ -1,6 +1,5 @@
 /**
- * Help sistem — kontekstualna pomoć za svaku stranicu.
- * Klik na "?" dugme otvara modal sa uputstvom.
+ * Help sistem — kontekstualna pomoć + link ka kompletnom uputstvu.
  */
 
 const HELP_CONTENT = {
@@ -46,7 +45,7 @@ const HELP_CONTENT = {
             },
             {
                 heading: "PDF i deljenje",
-                text: "Kliknite na „📄 PDF\" da preuzmete radni nalog, ili na „Link\" da kopirate link za praćenje statusa koji možete poslati klijentu."
+                text: "Kliknite na „📄 SR\" da preuzmete radni nalog na srpskom, ili „📄 EN\" za engleski. Klik na „Link\" kopira link za praćenje statusa koji možete poslati klijentu."
             }
         ]
     },
@@ -117,10 +116,37 @@ const HELP_CONTENT = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Proveri da li postoji help dugme u header-u, ako ne — dodaj ga
     const header = document.querySelector("header");
     if (!header) return;
 
+    // =====================================================
+    // 1. DODAJ "UPUTSTVO" DUGME (vodi na /help)
+    // =====================================================
+    let helpPageBtn = document.getElementById("btn-help-page");
+    if (!helpPageBtn) {
+        helpPageBtn = document.createElement("button");
+        helpPageBtn.id = "btn-help-page";
+        helpPageBtn.className = "btn-secondary header-logout-btn";
+        helpPageBtn.style.marginRight = "8px";
+        helpPageBtn.innerHTML = "📖 Uputstvo";
+        helpPageBtn.title = "Otvori kompletan PDF uputstvo";
+
+        helpPageBtn.addEventListener("click", () => {
+            window.open("/help", "_blank");
+        });
+
+        // Ubaci pre logout dugmeta
+        const logoutBtn = header.querySelector("#btn-logout");
+        if (logoutBtn) {
+            header.insertBefore(helpPageBtn, logoutBtn);
+        } else {
+            header.appendChild(helpPageBtn);
+        }
+    }
+
+    // =====================================================
+    // 2. DODAJ "POMOĆ" DUGME (modal sa kontekstualnom pomoći)
+    // =====================================================
     let helpBtn = document.getElementById("btn-help");
     if (!helpBtn) {
         helpBtn = document.createElement("button");
@@ -129,17 +155,23 @@ document.addEventListener("DOMContentLoaded", () => {
         helpBtn.style.marginRight = "8px";
         helpBtn.innerHTML = "❓ Pomoć";
         helpBtn.title = "Otvori pomoć za ovu stranicu";
-        
-        // Ubaci pre logout dugmeta
-        const logoutBtn = header.querySelector("#btn-logout");
-        if (logoutBtn) {
-            header.insertBefore(helpBtn, logoutBtn);
+
+        // Ubaci pre "Uputstvo" dugmeta
+        if (helpPageBtn) {
+            header.insertBefore(helpBtn, helpPageBtn);
         } else {
-            header.appendChild(helpBtn);
+            const logoutBtn = header.querySelector("#btn-logout");
+            if (logoutBtn) {
+                header.insertBefore(helpBtn, logoutBtn);
+            } else {
+                header.appendChild(helpBtn);
+            }
         }
     }
 
-    // Kreiraj help modal ako ne postoji
+    // =====================================================
+    // 3. KREIRAJ HELP MODAL (ako ne postoji)
+    // =====================================================
     let helpModal = document.getElementById("help-modal");
     if (!helpModal) {
         helpModal = document.createElement("div");
@@ -157,13 +189,15 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.appendChild(helpModal);
     }
 
-    // Otvori modal na klik
+    // =====================================================
+    // 4. OTVORI MODAL NA KLIK
+    // =====================================================
     helpBtn.addEventListener("click", () => {
         const path = window.location.pathname;
         const content = HELP_CONTENT[path] || HELP_CONTENT["/"];
-        
+
         document.getElementById("help-modal-title").textContent = content.title;
-        
+
         let html = "";
         content.sections.forEach(s => {
             html += `
@@ -173,12 +207,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
         });
-        
+
         document.getElementById("help-modal-content").innerHTML = html;
         helpModal.classList.add("active");
     });
 
-    // Zatvori modal
+    // =====================================================
+    // 5. ZATVORI MODAL
+    // =====================================================
     document.getElementById("btn-close-help").addEventListener("click", () => {
         helpModal.classList.remove("active");
     });
